@@ -63,3 +63,11 @@ The control ROM stores the control signals based on the CPU's state (opcode, zer
 | `R5` | 
 | `IA` | indirect addressing |
 | `SP` | stack pointer |
+
+## Assembler
+
+This repository also contains an assembler written in C++ that can be used to compile programs for the P-8.
+
+## `romgen.py`
+
+This can be used to generate the control signals stored in the control ROM
