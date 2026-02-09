@@ -11,7 +11,7 @@ P-8 is an 8-bit RISC with a single-cycle CPU.
 _(the lower 2 bits of reg2 are used for imm8, since all instructions either use 2 registers or a register and immediate)_
 
 ### Instruction table
-| opcode (bin) | mnemonic | explanation | control signals |
+| opcode (bin) | mnemonic | action | control signals |
 | ------------ |  ------------ |  ------------ |  ------------ | 
 | `0000` | `NOP` | `<none>` | `rwe: L rwd: 0 ainb: 0 rstr: L jmp: L` |
 | `0001` | `MOV` | `R1 <- R2` | `rwe: H rwd: 2 ainb: 0 rstr: L jmp: L` |
@@ -49,7 +49,7 @@ The control ROM stores the control signals based on the CPU's state (opcode, zer
 | `rwd` | `regs: write data selector` |
 | `ainb` | `alu: b input selector` |
 | `rstr` | `ram: store flag` |
-| `jmp` | `counter: jump to IA flag` |
+| `jmp` | `counter: jump to address stored in IA` |
 
 ### Registers
 
@@ -70,4 +70,4 @@ This repository also contains an assembler written in C++ that can be used to co
 
 ## `romgen.py`
 
-This can be used to generate the control signals stored in the control ROM
+This can be used to generate the control signals stored in the control ROM.
