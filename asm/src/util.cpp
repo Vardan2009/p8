@@ -18,9 +18,13 @@ std::string upper(std::string s) {
 std::vector<std::string> split(const std::string& s) {
     std::vector<std::string> tokens;
     std::string current;
+    bool inQuotes = false;
 
     for (char c : s) {
-        if (std::isspace(c) || c == ',') {
+        if (c == '"') {
+            inQuotes = !inQuotes;
+        } else if (!inQuotes &&
+                   (std::isspace(static_cast<unsigned char>(c)) || c == ',')) {
             if (!current.empty()) {
                 tokens.push_back(current);
                 current.clear();
@@ -30,7 +34,9 @@ std::vector<std::string> split(const std::string& s) {
         }
     }
 
-    if (!current.empty()) tokens.push_back(current);
+    if (!current.empty()) {
+        tokens.push_back(current);
+    }
 
     return tokens;
 }

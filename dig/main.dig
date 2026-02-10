@@ -12,7 +12,7 @@
         </entry>
         <entry>
           <string>Label</string>
-          <string>instmem</string>
+          <string>Program Memory</string>
         </entry>
         <entry>
           <string>Bits</string>
@@ -20,8 +20,7 @@
         </entry>
         <entry>
           <string>Data</string>
-          <data>2000,2201,2600,280a,1cc0,4000,2400,8400,8440,1040,1280,9601,1b00
-,aac0,2c12,6000,2c04,5000,f000</data>
+          <data>2c80,3000,f000</data>
         </entry>
         <entry>
           <string>intFormat</string>
@@ -191,24 +190,6 @@
       <pos x="860" y="80"/>
     </visualElement>
     <visualElement>
-      <elementName>RAMDualPort</elementName>
-      <elementAttributes>
-        <entry>
-          <string>AddrBits</string>
-          <int>8</int>
-        </entry>
-        <entry>
-          <string>Bits</string>
-          <int>8</int>
-        </entry>
-        <entry>
-          <string>intFormat</string>
-          <intFormat>dec</intFormat>
-        </entry>
-      </elementAttributes>
-      <pos x="1200" y="120"/>
-    </visualElement>
-    <visualElement>
       <elementName>Tunnel</elementName>
       <elementAttributes>
         <entry>
@@ -220,17 +201,7 @@
           <string>wclk</string>
         </entry>
       </elementAttributes>
-      <pos x="1180" y="180"/>
-    </visualElement>
-    <visualElement>
-      <elementName>VDD</elementName>
-      <elementAttributes>
-        <entry>
-          <string>rotation</string>
-          <rotation rotation="1"/>
-        </entry>
-      </elementAttributes>
-      <pos x="1180" y="200"/>
+      <pos x="1240" y="180"/>
     </visualElement>
     <visualElement>
       <elementName>Tunnel</elementName>
@@ -263,16 +234,6 @@
       <pos x="1060" y="100"/>
     </visualElement>
     <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>NetName</string>
-          <string>ds_4</string>
-        </entry>
-      </elementAttributes>
-      <pos x="1280" y="160"/>
-    </visualElement>
-    <visualElement>
       <elementName>EEPROM</elementName>
       <elementAttributes>
         <entry>
@@ -281,7 +242,7 @@
         </entry>
         <entry>
           <string>Label</string>
-          <string>ctrlrom</string>
+          <string>Control ROM</string>
         </entry>
         <entry>
           <string>Bits</string>
@@ -479,8 +440,8 @@
       <elementAttributes>
         <entry>
           <string>Description</string>
-          <string>by Vardan Petrosyan
-December 2025</string>
+          <string>Revision II (February 2026)
+Vardan Petrosyan</string>
         </entry>
       </elementAttributes>
       <pos x="320" y="-100"/>
@@ -523,6 +484,10 @@ December 2025</string>
         <entry>
           <string>rotation</string>
           <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>inst</string>
         </entry>
         <entry>
           <string>Bits</string>
@@ -676,6 +641,21 @@ December 2025</string>
       <elementAttributes/>
       <pos x="480" y="320"/>
     </visualElement>
+    <visualElement>
+      <elementName>mem.dig</elementName>
+      <elementAttributes/>
+      <pos x="1260" y="100"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>NetName</string>
+          <string>ds_4</string>
+        </entry>
+      </elementAttributes>
+      <pos x="1420" y="140"/>
+    </visualElement>
   </visualElements>
   <wires>
     <wire>
@@ -739,10 +719,6 @@ December 2025</string>
       <p2 x="560" y="580"/>
     </wire>
     <wire>
-      <p1 x="1180" y="200"/>
-      <p2 x="1200" y="200"/>
-    </wire>
-    <wire>
       <p1 x="1240" y="520"/>
       <p2 x="1260" y="520"/>
     </wire>
@@ -772,7 +748,11 @@ December 2025</string>
     </wire>
     <wire>
       <p1 x="1100" y="140"/>
-      <p2 x="1200" y="140"/>
+      <p2 x="1220" y="140"/>
+    </wire>
+    <wire>
+      <p1 x="1400" y="140"/>
+      <p2 x="1420" y="140"/>
     </wire>
     <wire>
       <p1 x="320" y="780"/>
@@ -891,20 +871,16 @@ December 2025</string>
       <p2 x="1200" y="480"/>
     </wire>
     <wire>
-      <p1 x="1260" y="160"/>
-      <p2 x="1280" y="160"/>
-    </wire>
-    <wire>
-      <p1 x="1140" y="160"/>
-      <p2 x="1200" y="160"/>
-    </wire>
-    <wire>
       <p1 x="780" y="160"/>
       <p2 x="880" y="160"/>
     </wire>
     <wire>
       <p1 x="1020" y="160"/>
       <p2 x="1060" y="160"/>
+    </wire>
+    <wire>
+      <p1 x="1140" y="160"/>
+      <p2 x="1260" y="160"/>
     </wire>
     <wire>
       <p1 x="640" y="740"/>
@@ -921,6 +897,10 @@ December 2025</string>
     <wire>
       <p1 x="1020" y="100"/>
       <p2 x="1060" y="100"/>
+    </wire>
+    <wire>
+      <p1 x="1200" y="100"/>
+      <p2 x="1260" y="100"/>
     </wire>
     <wire>
       <p1 x="700" y="680"/>
@@ -991,6 +971,14 @@ December 2025</string>
       <p2 x="1560" y="560"/>
     </wire>
     <wire>
+      <p1 x="1240" y="180"/>
+      <p2 x="1260" y="180"/>
+    </wire>
+    <wire>
+      <p1 x="840" y="180"/>
+      <p2 x="880" y="180"/>
+    </wire>
+    <wire>
       <p1 x="1180" y="500"/>
       <p2 x="1200" y="500"/>
     </wire>
@@ -1011,20 +999,16 @@ December 2025</string>
       <p2 x="920" y="500"/>
     </wire>
     <wire>
-      <p1 x="840" y="180"/>
-      <p2 x="880" y="180"/>
-    </wire>
-    <wire>
-      <p1 x="1180" y="180"/>
-      <p2 x="1200" y="180"/>
-    </wire>
-    <wire>
       <p1 x="820" y="120"/>
       <p2 x="880" y="120"/>
     </wire>
     <wire>
       <p1 x="1020" y="120"/>
       <p2 x="1120" y="120"/>
+    </wire>
+    <wire>
+      <p1 x="1220" y="120"/>
+      <p2 x="1260" y="120"/>
     </wire>
     <wire>
       <p1 x="1120" y="120"/>
@@ -1089,6 +1073,10 @@ December 2025</string>
     <wire>
       <p1 x="1220" y="440"/>
       <p2 x="1220" y="640"/>
+    </wire>
+    <wire>
+      <p1 x="1220" y="120"/>
+      <p2 x="1220" y="140"/>
     </wire>
     <wire>
       <p1 x="840" y="680"/>
@@ -1189,6 +1177,10 @@ December 2025</string>
     <wire>
       <p1 x="880" y="300"/>
       <p2 x="880" y="420"/>
+    </wire>
+    <wire>
+      <p1 x="1200" y="100"/>
+      <p2 x="1200" y="120"/>
     </wire>
     <wire>
       <p1 x="820" y="100"/>

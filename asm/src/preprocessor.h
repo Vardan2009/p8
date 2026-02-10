@@ -1,12 +1,14 @@
 #pragma once
 
+#include <cstdint>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
 class Preprocessor {
    public:
-    std::vector<std::string> run(const std::vector<std::string>& input);
+    std::vector<std::string> run(const std::vector<std::string>& input,
+                                 std::vector<uint8_t>& rom);
 
    private:
     struct Macro {

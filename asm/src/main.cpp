@@ -1,7 +1,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <sstream>
+#include <string>
 #include <vector>
 
 #include "assembler.h"
@@ -26,7 +26,10 @@ int main(int argc, char** argv) {
     while (std::getline(in, line)) src.push_back(line);
 
     Preprocessor pp;
-    auto expanded = pp.run(src);
+
+    std::vector<uint8_t> rom;
+
+    auto expanded = pp.run(src, rom);
 
     Assembler asmblr;
     auto code = asmblr.assemble(expanded);
@@ -35,5 +38,11 @@ int main(int argc, char** argv) {
     out << "v2.0 raw\n";
     for (auto w : code)
         out << std::uppercase << std::hex << std::setw(4) << std::setfill('0')
-            << w << "\n";
+            << w << '\n';
+
+    std::ofstream outrom(std::string(path) + ".rom.hex");
+    outrom << "v2.0 raw\n";
+    for (auto b : rom)
+        outrom << std::uppercase << std::hex << std::setw(2)
+               << std::setfill('0') << (int)b << '\n';
 }

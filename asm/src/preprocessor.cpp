@@ -1,14 +1,17 @@
 #include "preprocessor.h"
 
+#include <cstdint>
+#include <cstdio>
 #include <sstream>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
+#include "expr.h"
 #include "util.h"
 
 std::vector<std::string> Preprocessor::run(
-    const std::vector<std::string>& input) {
+    const std::vector<std::string>& input, std::vector<uint8_t>& rom) {
     std::vector<std::string> output;
 
     for (size_t i = 0; i < input.size(); ++i) {
@@ -44,6 +47,34 @@ std::vector<std::string> Preprocessor::run(
                 m.body.push_back(body);
             }
             macros[name] = m;
+            continue;
+        }
+
+        if (upper(tokens[0]) == ".ROM") {
+            if (tokens.size() != 4) {
+                fprintf(stderr, "p8asm: invalid .rom\n");
+                exit(1);
+            }
+
+            std::string dtype = upper(tokens[1]);
+            std::string name = upper(tokens[2]);
+
+            defines[name] = std::to_string(0x80 + rom.size());
+
+            if (dtype == "BYTE") {
+                rom.push_back(Expression::parseToken(tokens[3], {}));
+            } else if (dtype == "ASCII") {
+                for (int i = 0; i < tokens[3].size(); ++i)
+                    rom.push_back(tokens[3][i]);
+            } else if (dtype == "ASCIIZ") {
+                for (int i = 0; i < tokens[3].size(); ++i)
+                    rom.push_back(tokens[3][i]);
+                rom.push_back(0);
+            } else {
+                fprintf(stderr, "p8asm: invalid .rom dtype `%s`\n",
+                        dtype.c_str());
+                exit(1);
+            }
             continue;
         }
 

@@ -1,6 +1,6 @@
 # P-8
 ![screenshot](/images/p8.png)
-P-8 is an 8-bit RISC with a single-cycle CPU.
+P-8 is an 8-bit RISC with a single-cycle CPU. Its maximum speed is about 5 MHz (according to Digital).
 
 ## Design
 
@@ -63,6 +63,17 @@ The control ROM stores the control signals based on the CPU's state (opcode, zer
 | `R5` | 
 | `IA` | indirect addressing |
 | `SP` | stack pointer |
+
+## Addresses
+
+There are two memory devices that a P-8 program can use -- RAM and ROM. 
+ROM values are pre-defined for each program and are (obviously) readonly.
+
+Address ranges:
+```
+0x00-0x80 -- RAM, read/write
+0x80-0xFF -- ROM, readonly
+```
 
 ## Assembler
 
