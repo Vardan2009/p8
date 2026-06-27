@@ -46,7 +46,7 @@ fn print_state(cpu_state: &emu::CPUState) {
     print!(" - SP: {:02x}\n", cpu_state.sp);
     print!(" - PC: {:02x}\n", cpu_state.pc);
 
-    print!("\n====== PROGRAM STATE ======\n");
+    print!("\n===== PROGRAM STATE =====\n");
 
     view_disasm_nearby(cpu_state);
 
