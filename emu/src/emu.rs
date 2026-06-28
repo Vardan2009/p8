@@ -50,6 +50,21 @@ pub fn mem_write(address : u8, value : u8, cpu_state: &mut CPUState) {
    cpu_state.ram[address as usize] = value;
 }
 
+pub fn reset(cpu_state: &mut CPUState) {
+    cpu_state.r0 = 0;
+    cpu_state.r1 = 0;
+    cpu_state.r2 = 0;
+    cpu_state.r3 = 0;
+    cpu_state.r4 = 0;
+    cpu_state.r5 = 0;
+    cpu_state.ia = 0;
+    cpu_state.sp = 0;
+    cpu_state.pc = 0;
+
+    cpu_state.zflag = false;
+    cpu_state.nflag = false;
+}
+
 pub fn step(cpu_state: &mut CPUState) {
     let inst = inst::decode(cpu_state.pc, cpu_state.progmem[cpu_state.pc as usize]);
 

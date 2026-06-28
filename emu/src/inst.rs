@@ -37,22 +37,22 @@ pub fn decode(address : u8, raw: u16) -> Instruction {
 }
 
 pub fn print(inst : &Instruction) {
-    print!("{:02x}\t{} ", inst.address, inst.opcode);
+    print!("{:02x} {: <4} ", inst.address, format!("{:?}",inst.opcode));
 
     match inst.opcode {
-        Opcode::MOV => print!("{}  <- {}", inst.reg1, inst.reg2),
-        Opcode::LDI => print!("{}  <- {:02x}", inst.reg1, inst.imm),
+        Opcode::MOV => print!("{}  <-  {}", inst.reg1, inst.reg2),
+        Opcode::LDI => print!("{}  <-  {:02x}", inst.reg1, inst.imm),
         Opcode::LDR => print!("{}  <- *IA", inst.reg1),
-        Opcode::STR => print!("*IA <- {}", inst.reg2),
+        Opcode::STR => print!("*IA <-  {}", inst.reg2),
         Opcode::ADD |
         Opcode::SUB |
         Opcode::AND |
         Opcode::OR  |
-        Opcode::XOR => print!("{}  <- {}", inst.reg1, inst.reg2),
-        Opcode::NOT => print!("{}", inst.reg1),
-        Opcode::ADDI => print!("{} <- {:02x}", inst.reg1, inst.imm),
-        _ => {}
+        Opcode::XOR => print!("{}  <-  {}", inst.reg1, inst.reg2),
+        Opcode::NOT => print!("{}        ", inst.reg1),
+        Opcode::ADDI =>print!("{} <-   {:02x}", inst.reg1, inst.imm),
+        _ =>           print!("          "),
     }
 
-    print!("\t\t\t\t{:016b}\n", inst.assembled);
+    print!("   {:016b}\n", inst.assembled);
 }

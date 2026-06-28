@@ -7,6 +7,7 @@ mod reg;
 use std::io;
 use std::io::Write;
 
+
 fn run(cpu_state: &mut emu::CPUState) {
     while (cpu_state.progmem[cpu_state.pc as usize] & 0xF000) != 0xF000 {
         emu::step(cpu_state);
@@ -44,8 +45,12 @@ fn print_state(cpu_state: &emu::CPUState) {
     print!(" - R5: {:02x}\n", cpu_state.r5);
     print!(" - IA: {:02x}\n", cpu_state.ia);
     print!(" - SP: {:02x}\n", cpu_state.sp);
-    print!(" - PC: {:02x}\n", cpu_state.pc);
+    print!(" - PC: {:02x}\n\n", cpu_state.pc);
 
+
+    print!(" - Z:  {}\n", if cpu_state.zflag {"SET"} else {"UNSET"});
+    print!(" - N:  {}\n\n", if cpu_state.nflag {"SET"} else {"UNSET"});
+    
     print!("\n===== PROGRAM STATE =====\n");
 
     view_disasm_nearby(cpu_state);
@@ -70,10 +75,20 @@ fn unknown_command(cmd: &Vec<&str>) {
 }
 
 fn load_file(cmd: &Vec<&str>, cpu_state: &mut emu::CPUState) {
+    if cmd.len() != 2 {
+        print!("Invalid arguments: usage: <l|load> <filepath>\n");
+        return;
+    }
+
     let _ = fileop::read_hex_file(cmd[1], &mut cpu_state.progmem);
 }
 
 fn load_rom(cmd: &Vec<&str>, cpu_state: &mut emu::CPUState) {
+    if cmd.len() != 2 {
+        print!("Invalid arguments: usage: <lr|loadrom> <filepath>\n");
+        return;
+    }
+
     let _ = fileop::read_hex_file_u8(cmd[1], &mut cpu_state.rom);
 }
 
@@ -85,6 +100,25 @@ fn memdump(cpu_state: &emu::CPUState) {
     for (addr, val) in cpu_state.rom.iter().enumerate() {
         print!("{:02x}: {:02x}\n", (addr + 0x80) as u8, val);
     }
+}
+
+fn jump(cmd: &Vec<&str>, cpu_state: &mut emu::CPUState) {
+    if cmd.len() != 2 {
+        print!("Invalid arguments: usage: <j|jump> <new pc>\n");
+        return;
+    }
+
+    let parse_result = cmd[1].parse::<u8>();
+
+    let newpc = match parse_result {
+        Ok(newpc) => newpc,
+        Err(_error) => {
+            print!("Failed to parse argument\n");
+            return;
+        }
+    };
+    
+    cpu_state.pc = newpc;
 }
 
 fn main() {
@@ -125,6 +159,8 @@ fn main() {
             "load"    | "l"  => load_file(&cmd, &mut cpu_state),
             "loadrom" | "lr" => load_rom(&cmd, &mut cpu_state),
             "memdump" | "m"  => memdump(&cpu_state),
+            "jump"    | "j"  => jump(&cmd, &mut cpu_state),
+            "reset"   | "re" => emu::reset(&mut cpu_state),
             _               => unknown_command(&cmd)
         }
     }
