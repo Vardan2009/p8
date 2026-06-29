@@ -7,7 +7,6 @@ mod reg;
 use std::io;
 use std::io::Write;
 
-
 fn run(cpu_state: &mut emu::CPUState) {
     while (cpu_state.progmem[cpu_state.pc as usize] & 0xF000) != 0xF000 {
         emu::step(cpu_state);
@@ -47,10 +46,12 @@ fn print_state(cpu_state: &emu::CPUState) {
     print!(" - SP: {:02x}\n", cpu_state.sp);
     print!(" - PC: {:02x}\n\n", cpu_state.pc);
 
+    print!(" - Z:  {}\n", if cpu_state.zflag { "SET" } else { "UNSET" });
+    print!(
+        " - N:  {}\n\n",
+        if cpu_state.nflag { "SET" } else { "UNSET" }
+    );
 
-    print!(" - Z:  {}\n", if cpu_state.zflag {"SET"} else {"UNSET"});
-    print!(" - N:  {}\n\n", if cpu_state.nflag {"SET"} else {"UNSET"});
-    
     print!("\n===== PROGRAM STATE =====\n");
 
     view_disasm_nearby(cpu_state);
@@ -61,11 +62,11 @@ fn print_state(cpu_state: &emu::CPUState) {
 fn view_disasm(cpu_state: &emu::CPUState) {
     for (index, inst) in cpu_state.progmem.iter().enumerate() {
         let decoded = inst::decode(index as u8, *inst);
-        
+
         if index as u8 == cpu_state.pc {
             print!("> ");
         }
-        
+
         inst::print(&decoded);
     }
 }
@@ -117,7 +118,7 @@ fn jump(cmd: &Vec<&str>, cpu_state: &mut emu::CPUState) {
             return;
         }
     };
-    
+
     cpu_state.pc = newpc;
 }
 
@@ -135,8 +136,8 @@ fn main() {
         zflag: false,
         nflag: false,
         progmem: [0; 256],
-        ram:     [0; 128],
-        rom:     [0; 128]
+        ram: [0; 128],
+        rom: [0; 128],
     };
 
     loop {
@@ -145,23 +146,25 @@ fn main() {
 
         let mut input = String::new();
         io::stdin().read_line(&mut input).unwrap();
-        
+
         let trimmed_input = input.trim();
-        if trimmed_input.is_empty() { continue; }
+        if trimmed_input.is_empty() {
+            continue;
+        }
 
         let cmd: Vec<&str> = trimmed_input.split_whitespace().collect();
 
         match cmd[0] {
-            "status"  | "st" => print_state(&cpu_state),
-            "step"    | "s"  => emu::step(&mut cpu_state),
-            "run"     | "r"  => run(&mut cpu_state),
-            "disasm"  | "d"  => view_disasm(&cpu_state),
-            "load"    | "l"  => load_file(&cmd, &mut cpu_state),
+            "status" | "st" => print_state(&cpu_state),
+            "step" | "s" => emu::step(&mut cpu_state),
+            "run" | "r" => run(&mut cpu_state),
+            "disasm" | "d" => view_disasm(&cpu_state),
+            "load" | "l" => load_file(&cmd, &mut cpu_state),
             "loadrom" | "lr" => load_rom(&cmd, &mut cpu_state),
-            "memdump" | "m"  => memdump(&cpu_state),
-            "jump"    | "j"  => jump(&cmd, &mut cpu_state),
-            "reset"   | "re" => emu::reset(&mut cpu_state),
-            _               => unknown_command(&cmd)
+            "memdump" | "m" => memdump(&cpu_state),
+            "jump" | "j" => jump(&cmd, &mut cpu_state),
+            "reset" | "re" => emu::reset(&mut cpu_state),
+            _ => unknown_command(&cmd),
         }
     }
 }

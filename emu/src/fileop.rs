@@ -1,5 +1,5 @@
-use std::io::{self, BufRead, BufReader};
 use std::fs::File;
+use std::io::{self, BufRead, BufReader};
 
 pub fn read_hex_file(path: &str, data: &mut [u16; 256]) -> io::Result<()> {
     let file = File::open(path)?;
@@ -25,7 +25,10 @@ pub fn read_hex_file(path: &str, data: &mut [u16; 256]) -> io::Result<()> {
         }
 
         let value = u16::from_str_radix(line, 16).map_err(|e| {
-            io::Error::new(io::ErrorKind::InvalidData, format!("line {}: {}", line_num + 1, e))
+            io::Error::new(
+                io::ErrorKind::InvalidData,
+                format!("line {}: {}", line_num + 1, e),
+            )
         })?;
 
         data[index] = value;
@@ -59,7 +62,10 @@ pub fn read_hex_file_u8(path: &str, data: &mut [u8; 128]) -> io::Result<()> {
         }
 
         let value = u8::from_str_radix(line, 16).map_err(|e| {
-            io::Error::new(io::ErrorKind::InvalidData, format!("line {}: {}", line_num + 1, e))
+            io::Error::new(
+                io::ErrorKind::InvalidData,
+                format!("line {}: {}", line_num + 1, e),
+            )
         })?;
 
         data[index] = value;
@@ -68,5 +74,3 @@ pub fn read_hex_file_u8(path: &str, data: &mut [u8; 128]) -> io::Result<()> {
 
     Ok(())
 }
-
-

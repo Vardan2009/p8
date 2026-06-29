@@ -3,7 +3,14 @@ use std::fmt;
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u8)]
 pub enum Register {
-    R0, R1, R2, R3, R4, R5, IA, SP,
+    R0,
+    R1,
+    R2,
+    R3,
+    R4,
+    R5,
+    IA,
+    SP,
 }
 
 pub fn reg_from_bits(bits: u8) -> Register {
@@ -24,4 +31,3 @@ impl fmt::Display for Register {
         write!(f, "{:?}", self)
     }
 }
-

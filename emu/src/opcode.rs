@@ -3,10 +3,22 @@ use std::fmt;
 #[derive(Debug)]
 #[repr(u8)]
 pub enum Opcode {
-    NOP, MOV, LDI, LDR, STR,
-    JMP, JZ,  JN,  ADD, ADDI,
-    SUB, AND, OR,  XOR, NOT,
-    HLT
+    NOP,
+    MOV,
+    LDI,
+    LDR,
+    STR,
+    JMP,
+    JZ,
+    JN,
+    ADD,
+    ADDI,
+    SUB,
+    AND,
+    OR,
+    XOR,
+    NOT,
+    HLT,
 }
 
 pub fn opcode_from_bits(bits: u8) -> Opcode {
@@ -27,7 +39,7 @@ pub fn opcode_from_bits(bits: u8) -> Opcode {
         0b1101 => Opcode::XOR,
         0b1110 => Opcode::NOT,
         0b1111 => Opcode::HLT,
-        _ => Opcode::HLT, 
+        _ => Opcode::HLT,
     }
 }
 
