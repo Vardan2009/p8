@@ -7,6 +7,34 @@ mod reg;
 use std::io;
 use std::io::Write;
 
+fn step(cmd: &Vec<&str>, cpu_state: &mut emu::CPUState) {
+    let mut step_count: i8 = 1;
+
+    if cmd.len() == 2 {
+        let parse_result = cmd[1].parse::<i8>();
+
+        step_count = match parse_result {
+            Ok(step_count) => step_count,
+            Err(_error) => {
+                print!("Failed to parse argument\n");
+                return;
+            }
+        };
+    } else if cmd.len() != 1 {
+        print!("Invalid arguments: usage: step [num, default 1]\n");
+        return;
+    }
+
+    if step_count <= 0 {
+        print!("Can't take <= 0 steps\n");
+        return;
+    }
+
+    for _ in 0..step_count {
+        emu::step(cpu_state);
+    }
+}
+
 fn run(cpu_state: &mut emu::CPUState) {
     while (cpu_state.progmem[cpu_state.pc as usize] & 0xF000) != 0xF000 {
         emu::step(cpu_state);
@@ -122,6 +150,62 @@ fn jump(cmd: &Vec<&str>, cpu_state: &mut emu::CPUState) {
     cpu_state.pc = newpc;
 }
 
+fn script(cmd: &Vec<&str>, cpu_state: &mut emu::CPUState) {
+    if cmd.len() != 2 {
+        print!("Invalid arguments: usage: <script|sc> <filepath>\n");
+        return;
+    }
+
+    let result = fileop::read_lines(cmd[1]);
+
+    let lines = match result {
+        Ok(lines) => lines,
+        Err(_) => {
+            print!("Failed to read file `{}`\n", cmd[1]);
+            return;
+        }
+    };
+
+    for line in lines {
+        execute_command(&line, cpu_state);
+    }
+}
+
+fn execute_command(input: &String, cpu_state: &mut emu::CPUState) {
+    if input.is_empty() {
+        return;
+    }
+
+    let trimmed_input = match input.trim().split_once('#') {
+        Some((before, _)) => before.trim_end(),
+        None => input,
+    };
+
+    if trimmed_input.is_empty() {
+        return;
+    }
+
+    let cmd: Vec<&str> = trimmed_input.split_whitespace().collect();
+
+    if cmd.len() < 1 {
+        return;
+    }
+
+    match cmd[0] {
+        "status" | "st" => print_state(cpu_state),
+        "step" | "s" => step(&cmd, cpu_state),
+        "run" | "r" => run(cpu_state),
+        "disasm" | "d" => view_disasm(cpu_state),
+        "load" | "l" => load_file(&cmd, cpu_state),
+        "loadrom" | "lr" => load_rom(&cmd, cpu_state),
+        "memdump" | "m" => memdump(cpu_state),
+        "jump" | "j" => jump(&cmd, cpu_state),
+        "reset" | "re" => emu::reset(cpu_state),
+        "script" | "sc" => script(&cmd, cpu_state),
+        _ => unknown_command(&cmd),
+    }
+}
+
 fn main() {
     let mut cpu_state = emu::CPUState {
         r0: 0,
@@ -147,24 +231,6 @@ fn main() {
         let mut input = String::new();
         io::stdin().read_line(&mut input).unwrap();
 
-        let trimmed_input = input.trim();
-        if trimmed_input.is_empty() {
-            continue;
-        }
-
-        let cmd: Vec<&str> = trimmed_input.split_whitespace().collect();
-
-        match cmd[0] {
-            "status" | "st" => print_state(&cpu_state),
-            "step" | "s" => emu::step(&mut cpu_state),
-            "run" | "r" => run(&mut cpu_state),
-            "disasm" | "d" => view_disasm(&cpu_state),
-            "load" | "l" => load_file(&cmd, &mut cpu_state),
-            "loadrom" | "lr" => load_rom(&cmd, &mut cpu_state),
-            "memdump" | "m" => memdump(&cpu_state),
-            "jump" | "j" => jump(&cmd, &mut cpu_state),
-            "reset" | "re" => emu::reset(&mut cpu_state),
-            _ => unknown_command(&cmd),
-        }
+        execute_command(&input, &mut cpu_state);
     }
 }

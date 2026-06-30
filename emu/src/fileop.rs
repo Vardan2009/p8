@@ -1,5 +1,13 @@
+use std::fs;
 use std::fs::File;
 use std::io::{self, BufRead, BufReader};
+
+pub fn read_lines(filename: &str) -> io::Result<Vec<String>> {
+    return Ok(fs::read_to_string(filename)?
+        .lines()
+        .map(String::from)
+        .collect());
+}
 
 pub fn read_hex_file(path: &str, data: &mut [u16; 256]) -> io::Result<()> {
     let file = File::open(path)?;

@@ -1,0 +1,7 @@
+# This is an emulator script, each line
+# Is executed line-by-line, similar to batch scripts
+
+reset
+step 3
+jump 0
+status
